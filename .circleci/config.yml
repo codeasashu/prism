@@ -20,6 +20,28 @@ commands:
               circleci step halt
             fi
 jobs:
+  build_and_sign:
+    macos:
+      xcode: "10.2.0"
+
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: yarn
+
+      - run:
+          name: Run build
+          command: yarn build
+
+      - run:
+          name: install nexe
+          command: npm install --global nexe
+
+      - run:
+          name: build osx app
+          command: nexe --target macos-10.13.0 packages/cli/dist/index.js
+
   build:
     executor: docker-node
     steps:
@@ -100,41 +122,4 @@ workflows:
   version: 2
   build:
     jobs:
-      - build:
-          filters:
-            tags:
-              only: /.*/
-      - harness:
-          name: harness-macos
-          executor: macos
-          filters:
-            branches:
-              only: master
-            tags:
-              only: /.*/
-      - harness:
-          executor: docker-node
-          filters:
-            tags:
-              only: /.*/
-      - publish:
-          filters:
-            branches:
-              only: master
-            tags:
-              only: /^v.*/
-          requires:
-            - build
-            - harness
-            - harness-macos
-      - upload_artifacts:
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
-          requires:
-            - build
-            - harness
-            - harness-macos
-            - publish
+      - build_and_sign
