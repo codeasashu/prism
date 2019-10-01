@@ -1,29 +1,65 @@
-[ ca ]
+#
+# Example OpenSSL configuration file for use with Let's Encrypt.
+# This is only being used for generation of certificate requests.
+# Modified from a standard example by Parliament Hill Computers Ltd.
+#
 
-default_ca = CA_default
+# This definition stops the following lines choking if HOME isn't
+# defined.
+HOME			= .
+RANDFILE		= $ENV::HOME/.rnd
 
 [ req ]
+default_bits		= 2048
+distinguished_name	= req_distinguished_name
+attributes		= req_attributes
 
-distinguished_name = req_distinguished_name
+# Stop confirmation prompts. All information is contained below.
+prompt			= no
 
-x509_extensions = v3_ca
+# The extensions to add to a certificate request - see [ v3_req ]
+req_extensions		= v3_req
 
-#req_extensions = v3_req
+[ req_distinguished_name ]
+# Describe the Subject (ie the origanisation).
+# The first 6 below could be shortened to: C ST L O OU CN
+# The short names are what are shown when the certificate is displayed.
+# Eg the details below would be shown as:
+#    Subject: C=UK, ST=Hertfordshire, L=My Town, O=Some Organisation, OU=Some Department, CN=www.example.com/emailAddress=bofh@example.com
 
-[req_distinguished_name ]
+# Leave as long names as it helps documentation
 
-CN = spaghetti.software.com
+countryName=		UK
+stateOrProvinceName=	Hertfordshire
+localityName=		My Town
+organizationName=	Some Organisation
+organizationalUnitName=	Some Department
+commonName=		www.example.com
+emailAddress=		bofh@example.com
 
-[ CA_default ]
+[ req_attributes ]
+# None. Could put Challenge Passwords, don't want them, leave empty
 
-x509_extensions = usr_cert
+[ v3_req ]
 
-[ usr_cert ]
+# X509v3 extensions to add to a certificate request
+# See x509v3_config
 
-[ v3_ca ]
+# What the key can/cannot be used for:
+basicConstraints = CA:FALSE
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+extendedKeyUsage = clientAuth,serverAuth
 
-basicConstraints = critical, CA:FALSE
+# The subjectAltName is where you give the names of extra web sites.
+# You may have more than one of these, so put in the section [ alt_names ]
+# If you do not have any extra names, comment the next line out.
+subjectAltName = @alt_names
 
-keyUsage = critical, cRLSign, digitalSignature, keyCertSign
-
-extendedKeyUsage = critical, serverAuth, clientAuth, codeSigning, emailProtection
+# List of all the other DNS names that the certificate should work for.
+# alt_names is a name of my own invention
+[ alt_names ]
+DNS.1 = devel.example.com
+DNS.2 = ipv6.example.com
+DNS.3 = ipv4.example.com
+DNS.4 = test.example.com
+DNS.5 = party.example.com
