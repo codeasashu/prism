@@ -18,7 +18,7 @@ attributes		= req_attributes
 prompt			= no
 
 # The extensions to add to a certificate request - see [ v3_req ]
-req_extensions		= v3_req
+req_extensions		= codesign
 
 [ req_distinguished_name ]
 # Describe the Subject (ie the origanisation).
@@ -40,15 +40,10 @@ emailAddress=		bofh@example.com
 [ req_attributes ]
 # None. Could put Challenge Passwords, don't want them, leave empty
 
-[ v3_req ]
+[ codesign ]
 
-# X509v3 extensions to add to a certificate request
-# See x509v3_config
-
-# What the key can/cannot be used for:
-basicConstraints = CA:FALSE
-keyUsage = nonRepudiation, digitalSignature, keyEncipherment
-extendedKeyUsage = clientAuth,serverAuth
+keyUsage=digitalSignature
+extendedKeyUsage=codeSigning
 
 # The subjectAltName is where you give the names of extra web sites.
 # You may have more than one of these, so put in the section [ alt_names ]
