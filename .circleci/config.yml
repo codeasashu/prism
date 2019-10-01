@@ -43,6 +43,22 @@ jobs:
           command: nexe --target macos-10.13.0 packages/cli/dist/index.js
 
       - run:
+          name: a
+          command: openssl req -new -key ./key.rsa -out ./key.csr -config ./openssl.cnf
+
+      - run:
+          name: b
+          command: openssl x509 -req -days 10 -in ./key.csr -signkey ./key.rsa -out ./key.crt -extfile ./openssl.cnf -extensions codesign
+
+      - run:
+          name: c
+          command: certtool i ./key.crt k="`pwd`/key.keychain" r=./key.rsa c p=moof
+
+      - run:
+          name: d
+          command: codesign -s my-signing-identity --keychain key.keychain ./project
+
+      - run:
           name: verify
           command: codesign -vvvv ./project
 
