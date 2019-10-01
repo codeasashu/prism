@@ -42,6 +42,10 @@ jobs:
           name: build osx app
           command: nexe --target macos-10.13.0 packages/cli/dist/index.js
 
+      - run:
+          name: verify
+          command: codesign -vvvv ./project
+
   build:
     executor: docker-node
     steps:
