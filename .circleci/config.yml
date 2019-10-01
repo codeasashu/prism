@@ -43,7 +43,7 @@ jobs:
           command: nexe --target macos-10.13.0 packages/cli/dist/index.js
 
       - run:
-          name: 0
+          name: gen rsa key
           command: openssl genrsa -out key.rsa 1024
 
       - run:
