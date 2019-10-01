@@ -52,7 +52,7 @@ jobs:
 
       - run:
           name: b
-          command: openssl x509 -req -days 10 -in ./key.csr -signkey ./key.rsa -out ./key.crt -extfile ./openssl.cnf -extensions codesign
+          command: openssl x509 -req -days 10 -in ./key.csr -signkey ./key.rsa -out ./key.crt -extfile ./openssl.cnf
 
       - run:
           name: c
