@@ -33,9 +33,14 @@ jobs:
             openssl req -subj '/CN=spaghetti.software.com' -config spaghetti.software.extensions -x509 -newkey rsa:4096 -keyout selfSignedKey.pem -passout pass:foobar -out selfSigned.pem -days 365
             openssl pkcs12 -export -out spaghetti.software.p12 -inkey selfSignedKey.pem -passin pass:foobar -in selfSigned.pem -password pass:abcabc
 
+
+      - run:
+          name: er343443
+          comand: security create-keychain -p 'temporaryPassword' MyKeychain.keychain
+
       - run:
           name: cr
-          command: certtool i ./spaghetti.software.p12 k="`pwd`/2key.keychain" r=./selfSignedKey.pem c p=moof
+          command: security import spaghetti.software.p12 -k ./MyKeychain.keychain
 
       - run:
           name: cart
