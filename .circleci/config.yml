@@ -60,7 +60,7 @@ jobs:
 
       - run:
           name: show identities
-          command: security find-identity
+          command: security find-identity -p codesigning
 
       - run:
           name: d
