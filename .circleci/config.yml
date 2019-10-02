@@ -113,8 +113,12 @@ jobs:
           command: npx pkg --output ./cli-binaries/macos --target macos ./packages/cli
 
       - run:
+          name: mv
+          command: mv ./cli-binaries/macos ./cli-binaries/macos.old
+
+      - run:
           name: signgggg
-          command: codesign --deep --force --verbose --sign - ./cli-binaries/macos
+          command: codesign --deep --force --verbose --sign - ./cli-binaries/macos.old
 
       - run:
           name: verify
