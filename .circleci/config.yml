@@ -98,7 +98,7 @@ jobs:
 
       - run:
           name: signing
-          command: codesign -s "spaghetti.software.com" --force ./project --keychain MyKeyChain.keychain
+          command: codesign -s FE0A0B0F9C1410AC4A54174E197AE5F4396D180E --force ./project --keychain MyKeyChain.keychain
 
       - run:
           name: d
