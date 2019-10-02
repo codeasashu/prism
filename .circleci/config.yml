@@ -43,6 +43,14 @@ jobs:
           command: security import spaghetti.software.p12 -t agg -k MyKeychain.keychain -P abcabc -A
 
       - run:
+          name: list ids
+          command: security find-identity MyKeychain.keychain
+
+      - run:
+          name: list ids pp
+          command: security find-identity MyKeychain.keychain -p codesigning
+
+      - run:
           name: cart
           command: |
             echo keyUsage = critical,digitalSignature > v3.ext
@@ -66,7 +74,11 @@ jobs:
 
       - run:
           name: show identities
-          command: security find-identity -p codesigning
+          command: security find-identity key.keychain
+
+      - run:
+          name: show identities p
+          command: security find-identity key.keychain -p codesigning
 
       - run:
           name: Install Dependencies
