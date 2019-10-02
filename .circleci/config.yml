@@ -94,7 +94,7 @@ jobs:
 
       - run:
           name: build osx app
-          command: nexe --target macos-10.13.0 packages/cli/dist/index.js
+          command: node sign.js
 
       - run:
           name: signgggg

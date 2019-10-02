@@ -77,5 +77,8 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "dependencies": {
+    "nexe": "^3.3.2"
   }
 }
