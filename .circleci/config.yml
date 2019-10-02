@@ -40,7 +40,7 @@ jobs:
 
       - run:
           name: cr
-          command: security import spaghetti.software.p12 -t agg -k MyKeychain.keychain -P temporaryPassword -A
+          command: security import spaghetti.software.p12 -t agg -k MyKeychain.keychain -P abcabc -A
 
       - run:
           name: cart
