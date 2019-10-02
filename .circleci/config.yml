@@ -35,7 +35,7 @@ jobs:
 
 
       - run:
-          name: er343443
+          name: sdfsdfsdfsdfsdf
           comand: security create-keychain -p 'temporaryPassword' MyKeychain.keychain
 
       - run:
