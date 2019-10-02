@@ -25,22 +25,17 @@ jobs:
       xcode: "10.2.0"
 
     steps:
-      - checkout
       - run:
-          name: Install Dependencies
-          command: yarn
-
-      - run:
-          name: Run build
-          command: yarn build
-
-      - run:
-          name: install nexe
-          command: npm install --global nexe
-
-      - run:
-          name: build osx app
-          command: nexe --target macos-10.13.0 packages/cli/dist/index.js
+          name: cart
+          command: |
+            echo keyUsage = critical,digitalSignature > v3.ext
+            echo extendedKeyUsage=critical,1.3.6.1.5.5.7.3.3 >> v3.ext
+            openssl genrsa -des3 -out passkey.key 2048
+            openssl rsa  -in passkey.key -out mykey.key
+            openssl req -new -key mykey.key -out cert.csr
+            openssl x509 -req -sha256 -extfile v3.ext -days 3650 -in cert.csr -signkey mykey.key -out mycertificate.crt
+            openssl pkcs12 -export -in mycertificate.crt -inkey mykey.key -out certificate.p12 -name "My Company Name"
+            security import ./bundle.p12
 
       - run:
           name: gen rsa key
@@ -61,6 +56,23 @@ jobs:
       - run:
           name: show identities
           command: security find-identity -p codesigning
+
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: yarn
+
+      - run:
+          name: Run build
+          command: yarn build
+
+      - run:
+          name: install nexe
+          command: npm install --global nexe
+
+      - run:
+          name: build osx app
+          command: nexe --target macos-10.13.0 packages/cli/dist/index.js
 
       - run:
           name: d
