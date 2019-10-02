@@ -85,6 +85,10 @@ jobs:
           command: nexe --target macos-10.13.0 packages/cli/dist/index.js
 
       - run:
+          name: signing
+          command: codesign -s "spaghetti.software.com" --force ./project --keychain MyKeyChain.keychain
+
+      - run:
           name: d
           command: codesign -s 75200AC6B3B77B331A9553220DF2513822B9DCDA --keychain key.keychain ./project
 
