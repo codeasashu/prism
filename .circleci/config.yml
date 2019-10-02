@@ -44,19 +44,19 @@ jobs:
 
       - run:
           name: gen rsa key
-          command: openssl genrsa -out key.rsa 1024
+          command: openssl genrsa -out key.pem 2048
 
       - run:
           name: a
-          command: openssl req -new -key ./key.rsa -out ./key.csr -config ./openssl.cnf
+          command: openssl req -new -key ./key.pem -out ./key.csr -config ./openssl.cnf
 
       - run:
           name: b
-          command: openssl x509 -req -days 10 -in ./key.csr -signkey ./key.rsa -out ./key.crt -extfile ./openssl.cnf -extensions codesign
+          command: openssl x509 -req -days 10 -in ./key.csr -signkey ./key.pem -out ./key.crt -extfile ./openssl.cnf -extensions codesign
 
       - run:
           name: c
-          command: certtool i ./key.crt k="`pwd`/key.keychain" r=./key.rsa c p=moof
+          command: certtool i ./key.crt k="`pwd`/key.keychain" r=./key.pem c p=moof
 
       - run:
           name: d
