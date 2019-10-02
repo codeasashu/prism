@@ -28,6 +28,12 @@ jobs:
       - checkout
 
       - run:
+          name: x
+          command: |
+            openssl req -subj '/CN=spaghetti.software.com' -config spaghetti.software.extensions -x509 -newkey rsa:4096 -keyout selfSignedKey.pem -out selfSigned.pem -days 365
+            openssl pkcs12 -export -out spaghetti.software.p12 -inkey selfSignedKey.pem -in selfSigned.pem
+
+      - run:
           name: cart
           command: |
             echo keyUsage = critical,digitalSignature > v3.ext
