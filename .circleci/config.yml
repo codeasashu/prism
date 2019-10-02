@@ -36,7 +36,7 @@ jobs:
 
       - run:
           name: sdfsdfsdfsdfsdf
-          comand: security create-keychain -p 'temporaryPassword' MyKeychain.keychain
+          command: security create-keychain -p 'temporaryPassword' MyKeychain.keychain
 
       - run:
           name: cr
