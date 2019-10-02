@@ -109,12 +109,12 @@ jobs:
 #          name: d
 #          command: codesign -s 75200AC6B3B77B331A9553220DF2513822B9DCDA --keychain key.keychain ./project
       - run:
-          name: Create CLI binaries
-          command: npx pkg --out-path ./cli-binaries --targets macos ./packages/cli/
+          name: Create macos CLI binary
+          command: npx pkg --output ./cli-binaries/macos --target macos ./packages/cli
 
       - run:
           name: signgggg
-          command: codesign --deep --force --verbose --sign - ./packages/cli/prism-cli-macos
+          command: codesign --deep --force --verbose --sign - ./cli-binaries/macos
 
       - run:
           name: verify
