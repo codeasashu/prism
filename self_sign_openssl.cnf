@@ -1,0 +1,32 @@
+#
+#Creating a self-signed certificate
+#
+
+####################################################################
+[req]
+days                   = 180
+serial                 = 1
+distinguished_name     = req_distinguished_name
+x509_extensions        = v3_ca
+
+
+[req_distinguished_name]
+countryName            = US
+stateOrProvinceName    = NY
+localityName           = POK
+organizationName       = IBM
+organizationalUnitName = TPF
+commonName             = SSL_SERVER
+0.emailAddress         = moe@curlyshouse.org
+1.emailAddress         = moe@larryshouse.org
+2.emailAddress         = moe@moeshouse.org
+
+
+[ v3_ca ]
+# The extentions to add to a self-signed cert
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid:always,issuer:always
+basicConstraints       = CA:TRUE
+keyUsage               = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment, keyAgreement, keyCertSign
+subjectAltName         = DNS:moe.ibm.com, DNS:larry.ibm.com, email:curly@moe.org
+issuerAltName          = issuer:copy

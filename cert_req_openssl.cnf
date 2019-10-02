@@ -1,0 +1,27 @@
+#
+#Creating a certificate request
+#
+
+####################################################################
+[req]
+days                   = 180
+distinguished_name     = req_distinguished_name
+req_extensions         = v3_req
+
+
+[req_distinguished_name]
+countryName            = US
+stateOrProvinceName    = NY
+localityName           = POK
+organizationName       = IBM
+organizationalUnitName = TPF
+commonName             = SSL_SERVER
+0.emailAddress         = moe@curlyshouse.org
+1.emailAddress         = moe@larryshouse.org
+2.emailAddress         = moe@moeshouse.org
+
+
+[ v3_req ]
+# Extensions to add to a certificate request
+basicConstraints       = CA:FALSE
+keyUsage               = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment, keyAgreement, keyCertSign

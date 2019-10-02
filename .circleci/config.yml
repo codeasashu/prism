@@ -35,23 +35,19 @@ jobs:
 
       - run:
           name: gen rsa key
-          command: openssl genrsa -out key.pem 2048
+          command: openssl genrsa -out key.pem 2048 -config ./self_sign_openssl.cnf
 
       - run:
           name: a
-          command: openssl req -new -key ./key.pem -out ./key.csr -config ./openssl.cnf
+          command: openssl req -new -key ./key.pem -out ./key.csr -config ./cert_req_openssl.cnf
 
       - run:
           name: b
-          command: openssl x509 -req -days 10 -in ./key.csr -signkey ./key.pem -out ./key.crt -extfile ./v3.ext
+          command: openssl x509 -req -days 10 -in ./key.csr -signkey ./key.pem -out ./key.crt
 
       - run:
           name: c
           command: certtool i ./key.crt k="`pwd`/key.keychain" r=./key.pem c p=moof
-
-      - run:
-          name: e
-          command: security add-trusted-cert -d -r trustAsRoot -k "`pwd`/key.keychain" ./key.crt
 
       - run:
           name: show identities
