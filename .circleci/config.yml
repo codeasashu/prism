@@ -25,6 +25,8 @@ jobs:
       xcode: "10.2.0"
 
     steps:
+      - checkout
+
       - run:
           name: cart
           command: |
@@ -51,7 +53,6 @@ jobs:
           name: show identities
           command: security find-identity -p codesigning
 
-      - checkout
       - run:
           name: Install Dependencies
           command: yarn
