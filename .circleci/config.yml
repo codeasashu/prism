@@ -27,58 +27,58 @@ jobs:
     steps:
       - checkout
 
-      - run:
-          name: x
-          command: |
-            openssl req -subj '/CN=spaghetti.software.com' -config spaghetti.software.extensions -x509 -newkey rsa:4096 -keyout selfSignedKey.pem -passout pass:foobar -out selfSigned.pem -days 365
-            openssl pkcs12 -export -out spaghetti.software.p12 -inkey selfSignedKey.pem -passin pass:foobar -in selfSigned.pem -password pass:abcabc
-
-
-      - run:
-          name: sdfsdfsdfsdfsdf
-          command: security create-keychain -p 'temporaryPassword' MyKeychain.keychain
-
-      - run:
-          name: cr
-          command: security import spaghetti.software.p12 -t agg -k MyKeychain.keychain -P abcabc -A
-
-      - run:
-          name: list ids
-          command: security find-identity MyKeychain.keychain
-
-      - run:
-          name: list ids pp
-          command: security find-identity MyKeychain.keychain -p codesigning
-
-      - run:
-          name: cart
-          command: |
-            echo keyUsage = critical,digitalSignature > v3.ext
-            echo extendedKeyUsage=critical,1.3.6.1.5.5.7.3.3 >> v3.ext
-
-      - run:
-          name: gen rsa key
-          command: openssl genrsa -out key.pem 2048 -config ./self_sign_openssl.cnf
-
-      - run:
-          name: a
-          command: openssl req -new -key ./key.pem -out ./key.csr -config ./cert_req_openssl.cnf
-
-      - run:
-          name: b
-          command: openssl x509 -req -days 10 -in ./key.csr -signkey ./key.pem -out ./key.crt
-
-      - run:
-          name: c
-          command: certtool i ./key.crt k="`pwd`/key.keychain" r=./key.pem c p=moof
-
-      - run:
-          name: show identities
-          command: security find-identity key.keychain
-
-      - run:
-          name: show identities p
-          command: security find-identity key.keychain -p codesigning
+#      - run:
+#          name: x
+#          command: |
+#            openssl req -subj '/CN=spaghetti.software.com' -config spaghetti.software.extensions -x509 -newkey rsa:4096 -keyout selfSignedKey.pem -passout pass:foobar -out selfSigned.pem -days 365
+#            openssl pkcs12 -export -out spaghetti.software.p12 -inkey selfSignedKey.pem -passin pass:foobar -in selfSigned.pem -password pass:abcabc
+#
+#
+#      - run:
+#          name: sdfsdfsdfsdfsdf
+#          command: security create-keychain -p 'temporaryPassword' MyKeychain.keychain
+#
+#      - run:
+#          name: cr
+#          command: security import spaghetti.software.p12 -t agg -k MyKeychain.keychain -P abcabc -A
+#
+#      - run:
+#          name: list ids
+#          command: security find-identity MyKeychain.keychain
+#
+#      - run:
+#          name: list ids pp
+#          command: security find-identity MyKeychain.keychain -p codesigning
+#
+#      - run:
+#          name: cart
+#          command: |
+#            echo keyUsage = critical,digitalSignature > v3.ext
+#            echo extendedKeyUsage=critical,1.3.6.1.5.5.7.3.3 >> v3.ext
+#
+#      - run:
+#          name: gen rsa key
+#          command: openssl genrsa -out key.pem 2048 -config ./self_sign_openssl.cnf
+#
+#      - run:
+#          name: a
+#          command: openssl req -new -key ./key.pem -out ./key.csr -config ./cert_req_openssl.cnf
+#
+#      - run:
+#          name: b
+#          command: openssl x509 -req -days 10 -in ./key.csr -signkey ./key.pem -out ./key.crt
+#
+#      - run:
+#          name: c
+#          command: certtool i ./key.crt k="`pwd`/key.keychain" r=./key.pem c p=moof
+#
+#      - run:
+#          name: show identities
+#          command: security find-identity key.keychain
+#
+#      - run:
+#          name: show identities p
+#          command: security find-identity key.keychain -p codesigning
 
       - run:
           name: Install Dependencies
@@ -121,15 +121,15 @@ jobs:
           command: brew install squashfs
 
       - run:
-          name: sfsfd
+          name: generate a binary
           command: |
             curl -L http://enclose.io/nodec/nodec-darwin-x64.gz | gunzip > nodec
             chmod +x nodec
             ./nodec ./packages/cli/dist
 
-      - run:
-          name: sdf
-          command: ls
+#      - run:
+#          name: sdf
+#          command: ls
 
       - run:
           name: signgggg
