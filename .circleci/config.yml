@@ -93,7 +93,7 @@ jobs:
           command: npm install --global nexe
 
       - run:
-          no_output_timeout: 30m
+          no_output_timeout: 60m
           name: build osx app
           command: node sign.js
 
