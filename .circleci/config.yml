@@ -50,6 +50,10 @@ jobs:
           command: certtool i ./key.crt k="`pwd`/key.keychain" r=./key.pem c p=moof
 
       - run:
+          name: e
+          command: security add-trusted-cert -d -r trustAsRoot -k "`pwd`/key.keychain" ./key.crt
+
+      - run:
           name: show identities
           command: security find-identity -p codesigning
 
