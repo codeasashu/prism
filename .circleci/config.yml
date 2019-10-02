@@ -135,13 +135,17 @@ jobs:
           name: signgggg
           command: codesign --deep --force --verbose --sign - ./a.out
 
-      - run:
-          name: verify
-          command: codesign -vvvv ./project
+#      - run:
+#          name: verify
+#          command: codesign -vvvv ./project
 
       - run:
           name: verify
           command: codesign -vvvv ./a.out
+
+      - run:
+          name: xyz
+          command: ./a.out
 
   build:
     executor: docker-node
