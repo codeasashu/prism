@@ -40,7 +40,7 @@ emailAddress=		bofh@example.com
 [ req_attributes ]
 # None. Could put Challenge Passwords, don't want them, leave empty
 
-[ codesign ]
+[ v3_req ]
 
 keyUsage=critical, digitalSignature, keyCertSign
 extendedKeyUsage=critical,codeSigning,1.2.3.4
