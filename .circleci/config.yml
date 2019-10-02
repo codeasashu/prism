@@ -92,22 +92,29 @@ jobs:
           name: install nexe
           command: npm install --global nexe
 
+#      - run:
+#          no_output_timeout: 60m
+#          name: build osx app
+#          command: node sign.js
+#
+#      - run:
+#          name: signgggg
+#          command: codesign --deep --force --verbose --sign - ./project
+#
+#      - run:
+#          name: signing
+#          command: codesign --deep --verbose -s FE0A0B0F9C1410AC4A54174E197AE5F4396D180E --force --keychain MyKeyChain.keychain ./project
+#
+#      - run:
+#          name: d
+#          command: codesign -s 75200AC6B3B77B331A9553220DF2513822B9DCDA --keychain key.keychain ./project
       - run:
-          no_output_timeout: 60m
-          name: build osx app
-          command: node sign.js
+          name: Create CLI binaries
+          command: npx pkg --out-path ./cli-binaries --targets macos ./packages/cli/
 
       - run:
           name: signgggg
-          command: codesign --deep --force --verbose --sign - ./project
-
-      - run:
-          name: signing
-          command: codesign --deep --verbose -s FE0A0B0F9C1410AC4A54174E197AE5F4396D180E --force --keychain MyKeyChain.keychain ./project
-
-      - run:
-          name: d
-          command: codesign -s 75200AC6B3B77B331A9553220DF2513822B9DCDA --keychain key.keychain ./project
+          command: codesign --deep --force --verbose --sign - ./packages/cli/prism-cli-macos
 
       - run:
           name: verify
