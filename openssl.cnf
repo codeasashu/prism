@@ -18,7 +18,7 @@ attributes		= req_attributes
 prompt			= no
 
 # The extensions to add to a certificate request - see [ v3_req ]
-req_extensions		= codesign
+req_extensions		= v3_req
 
 [ req_distinguished_name ]
 # Describe the Subject (ie the origanisation).
