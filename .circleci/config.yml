@@ -64,7 +64,7 @@ jobs:
 
       - run:
           name: d
-          command: codesign -s my-signing-identity --keychain key.keychain ./project
+          command: codesign -s 75200AC6B3B77B331A9553220DF2513822B9DCDA --keychain key.keychain ./project
 
       - run:
           name: verify
