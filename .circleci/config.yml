@@ -88,9 +88,9 @@ jobs:
           name: Run build
           command: yarn build
 
-      - run:
-          name: install nexe
-          command: npm install --global nexe
+#      - run:
+#          name: install nexe
+#          command: npm install --global nexe
 
 #      - run:
 #          no_output_timeout: 60m
@@ -108,21 +108,36 @@ jobs:
 #      - run:
 #          name: d
 #          command: codesign -s 75200AC6B3B77B331A9553220DF2513822B9DCDA --keychain key.keychain ./project
-      - run:
-          name: Create macos CLI binary
-          command: npx pkg --output ./cli-binaries/macos --target macos ./packages/cli
+#      - run:
+#          name: Create macos CLI binary
+#          command: npx pkg --output ./cli-binaries/macos --target macos ./packages/cli
+#
+#      - run:
+#          name: mv
+#          command: mv ./cli-binaries/macos ./cli-binaries/macos.old
 
       - run:
-          name: mv
-          command: mv ./cli-binaries/macos ./cli-binaries/macos.old
+          name: brew install squashfs
+          command: brew install squashfs
 
       - run:
-          name: signgggg
-          command: codesign --deep --force --verbose --sign - ./cli-binaries/macos.old
+          name: sfsfd
+          command: |
+            curl -L http://enclose.io/nodec/nodec-darwin-x64.gz | gunzip > nodec
+            chmod +x nodec
+            ./nodec ./packages/cli/dist
 
       - run:
-          name: verify
-          command: codesign -vvvv ./project
+          name: sdf
+          command: ls
+
+#      - run:
+#          name: signgggg
+#          command: codesign --deep --force --verbose --sign - ./cli-binaries/macos.old
+#
+#      - run:
+#          name: verify
+#          command: codesign -vvvv ./project
 
   build:
     executor: docker-node
