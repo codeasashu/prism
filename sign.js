@@ -1,9 +1,9 @@
 require('nexe').compile({
   build: true,
-  // make: [ '-j4' ],
+  make: [ '-j4' ],
   input: './packages/cli/dist/index.js',
   targets: [ 'macos' ],
-  // output: 'daemon',
+  output: 'daemon',
   patches: [
     (x, next) => {
       x.code = () => [x.shims.join(''), x.input].join(';')

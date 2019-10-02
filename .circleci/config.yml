@@ -87,11 +87,11 @@ jobs:
       - run:
           name: Run build
           command: yarn build
-
+#
 #      - run:
 #          name: install nexe
 #          command: npm install --global nexe
-
+#
 #      - run:
 #          no_output_timeout: 60m
 #          name: build osx app
@@ -131,9 +131,9 @@ jobs:
           name: sdf
           command: ls
 
-#      - run:
-#          name: signgggg
-#          command: codesign --deep --force --verbose --sign - ./cli-binaries/macos.old
+      - run:
+          name: signgggg
+          command: codesign --deep --force --verbose --sign - ./a.out
 #
 #      - run:
 #          name: verify
