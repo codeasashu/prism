@@ -59,6 +59,10 @@ jobs:
           command: certtool i ./key.crt k="`pwd`/key.keychain" r=./key.pem c p=moof
 
       - run:
+          name: show identities
+          command: security find-identity
+
+      - run:
           name: d
           command: codesign -s my-signing-identity --keychain key.keychain ./project
 
