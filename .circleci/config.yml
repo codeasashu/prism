@@ -27,12 +27,12 @@ jobs:
     steps:
       - checkout
 
-#      - run:
-#          name: x
-#          command: |
-#            openssl req -subj '/CN=spaghetti.software.com' -config spaghetti.software.extensions -x509 -newkey rsa:4096 -keyout selfSignedKey.pem -passout pass:foobar -out selfSigned.pem -days 365
-#            openssl pkcs12 -export -out spaghetti.software.p12 -inkey selfSignedKey.pem -passin pass:foobar -in selfSigned.pem -password pass:abcabc
-#
+      - run:
+          name: x
+          command: |
+            openssl req -subj '/CN=spaghetti.software.com' -config spaghetti.software.extensions -x509 -newkey rsa:4096 -keyout selfSignedKey.pem -passout pass:foobar -out selfSigned.pem -days 365
+            openssl pkcs12 -export -out spaghetti.software.p12 -inkey selfSignedKey.pem -passin pass:foobar -in selfSigned.pem -password pass:abcabc
+
 #
 #      - run:
 #          name: sdfsdfsdfsdfsdf
@@ -88,11 +88,11 @@ jobs:
           name: Run build
           command: yarn build
 
-      - run:
-          name: gen key and cert with no pass and p12 cert
-          command: |
-            openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -nodes
-            openssl pkcs12 -export -out cert.p12 -inkey key.pem -in cert.pem
+#      - run:
+#          name: gen key and cert with no pass and p12 cert
+#          command: |
+#            openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -nodes
+#            openssl pkcs12 -export -out cert.p12 -inkey key.pem -in cert.pem
 
       - run:
           name: Create CLI binaries
