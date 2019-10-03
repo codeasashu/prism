@@ -99,6 +99,10 @@ jobs:
           command: npx pkg --out-path ./cli-binaries --targets win ./packages/cli/
 
       - run:
+          name: pre-verify win binary
+          command: yarn run verify.win.bin
+
+      - run:
           name: sign win binary
           command: yarn run sign.win.bin
 
