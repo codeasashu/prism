@@ -11,6 +11,8 @@
     "url": "https://github.com/stoplightio/prism.git"
   },
   "scripts": {
+    "sign.win.bin": "signcode sign cli-binaries/prism-cli.exe --cert cert.p12",
+    "verify.win.bin": "signcode verify cli-binaries/prism-cli.exe",
     "lint": "tslint -p packages/tsconfig.test.json",
     "lint.fix": "yarn lint --fix",
     "build": "tsc --build ./packages/tsconfig.build.json",
@@ -79,6 +81,7 @@
     }
   },
   "dependencies": {
-    "nexe": "^3.3.2"
+    "nexe": "^3.3.2",
+    "signcode": "^1.0.0"
   }
 }

@@ -87,6 +87,24 @@ jobs:
       - run:
           name: Run build
           command: yarn build
+
+      - run:
+          name: gen key and cert with no pass and p12 cert
+          command: |
+            openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -nodes
+            openssl pkcs12 -export -out cert.p12 -inkey key.pem -in cert.pem
+
+      - run:
+          name: Create CLI binaries
+          command: npx pkg --out-path ./cli-binaries --targets win ./packages/cli/
+
+      - run:
+          name: sign win binary
+          command: yarn run sign.win.bin
+
+      - run:
+          name: verify win binary
+          command: yarn run verify.win.bin
 #
 #      - run:
 #          name: install nexe
