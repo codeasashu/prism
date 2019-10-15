@@ -1,7 +1,7 @@
 // @ts-ignore
 import logger from 'abstract-logging';
 import * as Either from 'fp-ts/lib/Either';
-import { asks } from 'fp-ts/lib/ReaderEither';
+import { right } from 'fp-ts/lib/ReaderEither';
 import * as TaskEither from 'fp-ts/lib/TaskEither';
 import { Logger } from 'pino';
 import { factory, IPrismConfig } from '..';
@@ -19,7 +19,7 @@ describe('validation', () => {
       }),
     ),
     logger: { ...logger, child: jest.fn().mockReturnValue(logger) },
-    mock: jest.fn().mockReturnValue(asks<Logger, Error, string>(() => 'hey')),
+    mock: jest.fn().mockReturnValue(right<Logger, Error, string>('hey')),
   };
 
   const prismInstance = factory<string, string, string, IPrismConfig>(
@@ -32,10 +32,10 @@ describe('validation', () => {
     ['output', 'validateResponse', 'validateOutput', 'validateInput'],
   ])('%s', (_type, fieldType, fnName, reverseFnName) => {
     describe('when enabled', () => {
-      beforeAll(async () => {
+      beforeAll(() => {
         const obj: any = {};
         obj[fieldType] = true;
-        await prismInstance.request('', [], obj);
+        return prismInstance.request('', [], obj)();
       });
 
       afterEach(() => jest.clearAllMocks());
@@ -47,7 +47,7 @@ describe('validation', () => {
     });
 
     describe('when disabled', () => {
-      beforeAll(() => prismInstance.request('', []));
+      beforeAll(() => prismInstance.request('', [])());
       afterEach(() => jest.clearAllMocks());
       afterAll(() => jest.restoreAllMocks());
 

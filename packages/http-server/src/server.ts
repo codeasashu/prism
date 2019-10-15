@@ -9,6 +9,9 @@ import * as typeIs from 'type-is';
 import { getHttpConfigFromRequest } from './getHttpConfigFromRequest';
 import { serialize } from './serialize';
 import { IPrismHttpServer, IPrismHttpServerOpts } from './types';
+import { pipe } from 'fp-ts/lib/pipeable'
+import * as TaskEither from 'fp-ts/lib/TaskEither'
+import * as Task from 'fp-ts/lib/Task'
 
 export const createServer = (operations: IHttpOperation[], opts: IPrismHttpServerOpts): IPrismHttpServer => {
   const { components, config } = opts;
@@ -49,7 +52,7 @@ export const createServer = (operations: IHttpOperation[], opts: IPrismHttpServe
 
   const prism = createInstance(mergedConfig, components);
 
-  const replyHandler: fastify.RequestHandler<IncomingMessage, ServerResponse> = async (request, reply) => {
+  const replyHandler: fastify.RequestHandler<IncomingMessage, ServerResponse> = (request, reply) => {
     const {
       req: { method, url },
       body,
@@ -69,61 +72,68 @@ export const createServer = (operations: IHttpOperation[], opts: IPrismHttpServe
     };
 
     request.log.info({ input }, 'Request received');
-    try {
-      const operationSpecificConfig = getHttpConfigFromRequest(input);
-      const mockConfig = opts.config.mock === false ? false : { ...opts.config.mock, ...operationSpecificConfig };
+    const operationSpecificConfig = getHttpConfigFromRequest(input);
+    const mockConfig = opts.config.mock === false ? false : { ...opts.config.mock, ...operationSpecificConfig };
 
-      const response = await prism.request(input, operations, {
-        ...opts.config,
-        mock: mockConfig,
-      });
+    const prismRequest = prism.request(input, operations, {
+      ...opts.config,
+      mock: mockConfig,
+    });
 
-      const { output } = response;
+    return pipe(
+      prismRequest,
+      TaskEither.fold(error => {
+        const problemJsonError = ProblemJsonError.fromPlainError(error);
 
-      reply.code(output.statusCode);
+        if (!reply.sent) {
+          reply
+            .type('application/problem+json')
+            .serializer(JSON.stringify)
+            .code(problemJsonError.status);
 
-      if (output.headers) {
-        reply.headers(output.headers);
-      }
+          if (problemJsonError.headers) {
+            reply.headers(problemJsonError.headers);
+          }
 
-      response.validations.output.forEach(validation => {
-        if (validation.severity === DiagnosticSeverity.Error) {
-          request.log.error(`${validation.path} — ${validation.message}`);
-        } else if (validation.severity === DiagnosticSeverity.Warning) {
-          request.log.warn(`${validation.path} — ${validation.message}`);
+          reply.send(problemJsonError);
         } else {
-          request.log.info(`${validation.path} — ${validation.message}`);
-        }
-      });
-
-      reply.serializer((payload: unknown) => serialize(payload, reply.getHeader('content-type'))).send(output.body);
-    } catch (e) {
-      if (!reply.sent) {
-        const status = 'status' in e ? e.status : 500;
-        reply
-          .type('application/problem+json')
-          .serializer(JSON.stringify)
-          .code(status);
-
-        if (e.additional && e.additional.headers) {
-          reply.headers(e.additional.headers);
+          reply.res.end();
         }
 
-        reply.send(ProblemJsonError.fromPlainError(e));
-      } else {
-        reply.res.end();
-      }
+        request.log.error({ input, offset: 1 }, `Request terminated with error: ${error}`);
 
-      request.log.error({ input, offset: 1 }, `Request terminated with error: ${e}`);
-    }
+        return Task.of(reply);
+      }, response => {
+        const { output } = response;
+
+        reply.code(output.statusCode);
+
+        if (output.headers) {
+          reply.headers(output.headers);
+        }
+
+        response.validations.output.forEach(validation => {
+          if (validation.severity === DiagnosticSeverity.Error) {
+            request.log.error(`${validation.path} — ${validation.message}`);
+          } else if (validation.severity === DiagnosticSeverity.Warning) {
+            request.log.warn(`${validation.path} — ${validation.message}`);
+          } else {
+            request.log.info(`${validation.path} — ${validation.message}`);
+          }
+        });
+
+        return Task.of(reply.serializer((payload: unknown) => serialize(payload, reply.getHeader('content-type'))).send(output.body));
+
+      })
+    )()
   };
 
   opts.cors
     ? server.route({
-        url: '*',
-        method: ['GET', 'DELETE', 'HEAD', 'PATCH', 'POST', 'PUT'],
-        handler: replyHandler,
-      })
+      url: '*',
+      method: ['GET', 'DELETE', 'HEAD', 'PATCH', 'POST', 'PUT'],
+      handler: replyHandler,
+    })
     : server.all('*', replyHandler);
 
   const prismServer: IPrismHttpServer = {

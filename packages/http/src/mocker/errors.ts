@@ -1,4 +1,4 @@
-import { ProblemJson } from '../types';
+import { ProblemJson } from '@stoplight/prism-core';
 
 export const UNPROCESSABLE_ENTITY: Omit<ProblemJson, 'detail'> = {
   type: 'UNPROCESSABLE_ENTITY',

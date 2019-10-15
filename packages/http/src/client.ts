@@ -8,6 +8,8 @@ import { parse as parseUrl } from 'url';
 import { createInstance } from '.';
 import getHttpOperations, { getHttpOperationsFromResource } from './getHttpOperations';
 import { IHttpConfig, IHttpRequest, IHttpResponse, IHttpUrl } from './types';
+import * as Either from 'fp-ts/lib/Either';
+import { pipe } from 'fp-ts/lib/pipeable';
 
 interface IClientConfig extends IHttpConfig {
   baseUrl?: string;
@@ -56,18 +58,20 @@ function createClientFromOperations(resources: IHttpOperation[], defaultConfig: 
         },
         resources,
         mergedConf,
-      );
+      )();
 
-      const output: PrismOutput = {
-        status: data.output.statusCode,
-        headers: data.output.headers || {},
-        data: data.output.body || {},
-        config: mergedConf,
-        request: { ...input, url: httpUrl },
-        violations: data.validations,
-      };
+      return pipe(data, Either.fold(e => { throw e; }, data => {
+        const output: PrismOutput = {
+          status: data.output.statusCode,
+          headers: data.output.headers || {},
+          data: data.output.body || {},
+          config: mergedConf,
+          request: { ...input, url: httpUrl },
+          violations: data.validations,
+        };
 
-      return output;
+        return output;
+      }))
     },
     get(url: string, input?: headersFromRequest | Partial<IClientConfig>, config?: Partial<IClientConfig>) {
       return isInput(input)

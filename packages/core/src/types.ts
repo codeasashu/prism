@@ -6,7 +6,7 @@ import { Logger } from 'pino';
 export type IPrismDiagnostic = Omit<IDiagnostic, 'range'>;
 
 export interface IPrism<Resource, Input, Output, Config extends IPrismConfig> {
-  request: (input: Input, resources: Resource[], config?: Config) => Promise<IPrismOutput<Input, Output>>;
+  request: (input: Input, resources: Resource[], config?: Config) => TaskEither<Error, IPrismOutput<Input, Output>>;
 }
 
 export interface IPrismConfig {
@@ -52,6 +52,7 @@ export type ProblemJson = {
   title: string;
   status: number;
   detail: string;
+  [k: string]: any;
 };
 
 export class ProblemJsonError extends Error {

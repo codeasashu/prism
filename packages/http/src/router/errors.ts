@@ -1,4 +1,4 @@
-import { ProblemJson } from '../types';
+import { ProblemJson } from '@stoplight/prism-core';
 
 export const NO_BASE_URL_ERROR: Omit<ProblemJson, 'detail'> = {
   title: 'Attempted to make a request to a server but neither baseUrl param provided nor servers defined in the spec',
