@@ -12,7 +12,7 @@ executors:
         name: httpbin
   macos:
     macos:
-      xcode: 10.2.1
+      xcode: 11.1
 jobs:
   build:
     executor: docker-node
